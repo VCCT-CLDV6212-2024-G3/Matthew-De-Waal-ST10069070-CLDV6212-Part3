@@ -50,11 +50,15 @@ namespace ABCRetail.Controllers
             // Post the content to the url asynchronously.
             var clientResult = client.PostAsync(url, content);
 
+            this.Response.StatusCode = (int)clientResult.Result.StatusCode;
+
             // Iterate through the header collection.
             foreach(var item in clientResult.Result.Headers)
             {
                 this.Response.Headers.Add(item.Key, item.Value.ToList()[0]);
             }
+
+            this.Response.CompleteAsync();
 
             return View();
         }

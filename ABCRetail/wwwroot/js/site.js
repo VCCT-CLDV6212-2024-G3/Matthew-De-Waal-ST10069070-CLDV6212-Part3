@@ -24,8 +24,8 @@ function SignUp(userName, firstName, lastName, password, confirmedPassword) {
 
         POST_DATA("https://abcretail-st10069070.azurewebsites.net/api/SignUp", JSON.stringify(registration), function (request) {
             if (request.status == 200) {
-                // The request succeeded/
-                window.location = "/Home/SignIn"
+                // The request succeeded.
+                window.location = "/Home/SignIn";
             } else {
                 // The request failed.
                 document.getElementById("content1").style.display = "none";
@@ -53,7 +53,6 @@ function SignIn(userName, password) {
             let bSuccess = request.getResponseHeader("UserSignIn");
 
             if (bSuccess == "true") {
-
                 GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/GetUserDetails?username=" + btoa(userName) + "&password=" + btoa(password), function (status, response) {
                     if (response != "Failed") {
                         let request = new XMLHttpRequest();
@@ -141,6 +140,7 @@ function POST_DATA(url, data, e) {
 
     if (e != null) {
         request.onloadend = function () {
+            let t = request.getResponseHeader("UserSignIn");
             e(request);
         }
     }
