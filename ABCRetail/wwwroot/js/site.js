@@ -83,7 +83,7 @@ function SignIn(userName, password) {
 
 // This method sends a message to ABC Retail's storage system.
 function SendMessage(message) {
-    POST_DATA("https://abcretail-st10069070.azurewebsites.net/api/SendMessage", message, function (request) {
+    POST_DATA("https://abcretail-st10069070.azurewebsites.net/api/SendFeedback", message, function (request) {
         // The request succeeded.
         document.getElementById("txtMessage").value = "";
 

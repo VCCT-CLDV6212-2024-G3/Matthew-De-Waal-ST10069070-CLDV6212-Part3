@@ -15,11 +15,10 @@ namespace ABCRetail.Controllers
         public HomeController(IConfiguration configuration)
         {
 
-
         }
 
         [HttpGet]
-        public void GetData()
+        public IActionResult GetData()
         {
             // Get the url from the request header.
             string url = this.Request.Headers["URL"].ToString();
@@ -32,10 +31,12 @@ namespace ABCRetail.Controllers
             // Write the response to the Http Response object.
             this.Response.WriteAsync(response.Content.ReadAsStringAsync().Result);
             this.Response.CompleteAsync();
+
+            return View();
         }
 
         [HttpPost]
-        public void PostData()
+        public IActionResult PostData()
         {
             // Get the url from the request header.
             string url = this.Request.Headers["URL"].ToString();
@@ -54,10 +55,12 @@ namespace ABCRetail.Controllers
             {
                 this.Response.Headers.Add(item.Key, item.Value.ToList()[0]);
             }
+
+            return View();
         }
 
         [HttpPost]
-        public void SetUserDetails()
+        public IActionResult SetUserDetails()
         {
             // Obtain the request body.
             string requestBody = new StreamReader(this.Request.Body).ReadToEndAsync().Result;
@@ -69,6 +72,8 @@ namespace ABCRetail.Controllers
             ABCRetail.UserFirstName = Convert.ToString(userDetails.FirstName);
             ABCRetail.UserLastName = Convert.ToString(userDetails.LastName);
             ABCRetail.UserLoggedIn = true;
+
+            return View();
         }
 
         public IActionResult Index()
