@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Contacts";
+}
+
+<div style="margin-left: 16px">
+
+    <div align="center">
+        <!-- Content 1 -->
+        <div id="content1" style="display: block">
+            <div style="width: fit-content">
+                <br />
+
+                <img src="~/images/telephone.png" height="100" /><br /><br />
+                <h2 style="background-color: white; width: fit-content; display: inline-flex">Contact Us...</h2>
+
+                <br />
+                <br />
+                <span style="font-size: 14pt; background-color: white">Please send us feedback to help us improve our website and products.</span>
+                <br />
+                <br />
+            </div>
+            <div style="width: 600px">
+                <p align="left" style="margin: 0px"><b style="background-color: white; width: fit-content">Send us a message:</b><br /></p>
+                <textarea id="txtMessage" style="width: 100%; height: 300px"></textarea><br />
+
+                <div align="right">
+                    <button class="button-class" style="width: 150px" onclick="SendMessage(txtMessage.value)">Send Message</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content 2 -->
+        <div id="content2" style="display: none">
+            <h3 style="background-color: white; width: fit-content">Thank you for submitting your response.</h3>
+            <b style="background-color: white; width: fit-content">We will try our best to improve our website, products and services.</b><br /><br />
+            <button class="button-class button-class-small" onclick="CloseMessage()">OK</button>
+        </div>
+    </div>
+</div>
+

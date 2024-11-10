@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/GetBlobContent?container=MULTIMEDIA&path=/homepage-images/", function (status, response) {
+
+            let homepage_images = JSON.parse(response);
+
+            // Iterate through the 'homepage_images' collection.
+            for (let i = 0; i < homepage_images.length; i++) {
+                document.getElementById("image-display").innerHTML += "<img src=" + homepage_images[i] + " style='width: 90%; height: 500px; border-width: 5px; border-color: black; border-style: solid' /><br /><br />";
+            }
+
+        });
+
+    </script>
+
+}
+
+<div style="margin-left: 16px">
+    <div align="center">
+        <div style="width: 90%; background-color: white">
+            <br />
+            <br />
+            <h1>Explore our amazing products...</h1>
+            <a href="/Home/Products">Explore Now</a>
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div align="center" id="image-display">
+
+    </div>
+</div>

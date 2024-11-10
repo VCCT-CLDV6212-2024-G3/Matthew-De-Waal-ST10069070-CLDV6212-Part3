@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "ProductDisplay";
+}
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        // This method inserts empty spaces between words.
+        function split_string(str) {
+            let output = "";
+
+            if (str.length > 0)
+                output += str[0];
+
+                // Iterate through the string.
+            for(let i = 1; i < str.length; i++)
+            {
+                if (str[i].toUpperCase() == str[i]) { 
+                    output += " ";
+                }
+
+                output += str[i];
+            }
+
+            return output;
+        }
+    
+        // Get the query string from the url.
+        let queryString = window.location.search;
+        let query = new URLSearchParams(queryString);
+
+        // Display the selected category to the user.
+        document.getElementById("heading").innerHTML = "Category: " + split_string(query.get("Category"));
+
+        // SEnd a 'GET' command to the server.
+        GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/ReadFromTable?container=PRODUCT", function (status, response) {
+            let productTable = JSON.parse(response);
+            let products = [];
+
+            // Iterate through the productTable collection.
+            for (let i = 0; i < productTable.length; i++) { 
+                if (productTable[i][3] == query.get("Category")) { 
+                    products[products.length] = productTable[i];
+                }
+            }
+
+            let html = "";
+            let userLoggedIn = document.getElementById("UserLoggedIn").value;
+            let userName = document.getElementById("UserName").value;
+
+            // Iterate through the products collection.
+            for (let i = 0; i < products.length; i++) {
+                let imageFullPath = "https://cldv6212st10069070.blob.core.windows.net/product-images/" + products[i][5];
+                html += "<tr><td><a href='#' onclick='window.open(\"" + imageFullPath + "\", \"Preview\", \"width=800,height=460,resizable=yes\")'><img src='" + imageFullPath + "' style='width: 340px' /></a></td><td style='background-color: white'><b style='font-size: 13pt'>" + products[i][1] + "</b><br /><b style='font-size: 13pt'>Price: " + products[i][2] + "</b></td>";
+
+                if (userLoggedIn == "True") {
+                    html += "<td><button class='button-class button-class-small2' onclick='BuyProduct(\"" + products[i][0] + "\", \"" + userName + "\", \"OnceOff\")'>Pay Now</button><br /><button class='button-class button-class-small2' onclick='BuyProduct(\"" + products[i][0] + "\", \"" + userName + "\", \"Contract\")'>Pay On Contract</button></td>";
+                }
+
+                html += "</tr>";
+            }
+
+            document.getElementById("productList").innerHTML = html;
+        });
+        
+    </script>
+
+}
+
+<input type="hidden" value="@ABCRetail.UserLoggedIn.ToString()" id="UserLoggedIn" />
+<input type="hidden" value="@ABCRetail.UserName" id="UserName" />
+
+<div align="center">
+
+    <h3 id="heading" style="background-color: white; width: fit-content"></h3>
+    <br />
+
+    <table id="productList" cellpadding="16" style="border-color: black; border-width: 2px; border-style: solid">
+    </table>
+    <br />
+    <button class="button-class" onclick="window.location = '/Home/Products'">Back</button>
+    <br />
+    <br />
+
+</div>

@@ -1,0 +1,87 @@
+﻿@section Scripts {
+
+    <script type="text/javascript">
+
+        // Global variables.
+        let categories = null;
+        let productImages = null;
+
+        // Send a 'GET' command to the server.
+        GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/GetProductCategories", function (status, response) {
+        // Construct an object using JSON.    
+        categories = JSON.parse(response);
+
+        // Iterate through the categories collection.
+            for (let i = 0; i < categories.length; i++) {
+                document.getElementById("category-display").innerHTML += "<button class='button-class button-class-small2' style='background-color: white; color: black; border-color: black; border-width: 1px; border-style: solid' onmouseover='QuickNav_MouseHover(event)' onmouseout='QuickNav_MouseLeave(event)' onclick='document.getElementById(\"" + categories[i] + "\").scrollIntoView()'>" + categories[i] + "</button><span>&nbsp;&nbsp;</span>";
+            }
+        });
+
+        // Send a 'GET' command to the server.
+        GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/GetBlobContent?container=PRODUCT-IMAGE", function (status, response) {
+
+        // Construct an object using JSON.
+            productImages = JSON.parse(response);
+            let html = "";
+            let productImages2 = [];
+
+            // Iterate through the productImages collection.
+            for (let i = 0; i < productImages.length; i++)
+            {
+                if (productImages[i].includes("category-")) { 
+                    productImages2[productImages2.length] = productImages[i];
+                }
+            }
+
+            // Iterate through the productImages2 collection.
+            for (let i = 0; i < productImages2.length; i++) {
+                html += "<div id='" + categories[i] + "'><div><br /><div style='background-color: black; width: 300px'><div style='height: 0.5rem'></div><h4 style='font-weight: bold; margin: 0px; color: white'>" + categories[i] + "</h4><div style='height: 0.5rem'></div></div><br />";
+
+                if (productImages2[i].endsWith(".png")) {
+                    html += "<img src='" + productImages2[i] + "' height='400' />";
+                }
+                else {
+                    html += "<img src='" + productImages2[i] + "' height='400' style='border-color: black; border-width: 3px; border-style: solid' />";
+                }
+
+                html += "<br /><br />";
+
+                html += "<button class='button-class' onclick='window.location = \"/Home/ProductDisplay?Category=" + categories[i].replace(" ", "") + "\"'>View All Products</button><br /><br /><br /></div></div>"
+
+                if (i < (productImages2.length - 1)) {
+                    html += "<div style='background-color: rgb(120, 120, 120); height: 30px'><div style='height: 4px'></div><div style='background-color: rgb(220, 220, 220); height: 22px'></div></div>";
+                }
+            }
+
+            document.getElementById("product-display").innerHTML = html;
+        });
+
+    </script>
+
+}
+
+@{
+    ViewData["Title"] = "Products";
+
+            <div align="center">
+
+                <div style="background-color: white">
+                    <br />
+                    <br />
+                    <h1>Our Products</h1>
+                    <h4>Browse for product(s) by category...</h4>
+                    <br />
+                    <div>
+
+                        <i>Jump to...</i><br /><br />
+                        <div id="category-display"></div>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+
+                <div style="background-color: black; height: 3px"></div>
+                <div id="product-display"></div>
+
+            </div>
+}

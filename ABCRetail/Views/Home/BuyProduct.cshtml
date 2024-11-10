@@ -1,0 +1,81 @@
+﻿@section Scripts {
+
+    <script type="text/javascript">
+    
+        // Get the query string from the document url.
+        let queryString = window.location.search;
+        let query = new URLSearchParams(queryString);
+
+        // Send a 'GET' command to the server.
+        GET_DATA("https://abcretail-st10069070.azurewebsites.net/api/GetProductDetails?ProductId=" + query.get("ProductId"), function (status, response) {
+        
+        // Construct an object using JSON.
+        let productInfo = JSON.parse(response);
+            let imagePath = "https://cldv6212st10069070.blob.core.windows.net/product-images/" + productInfo[5];
+
+            document.getElementById("productId").innerHTML = productInfo[0];
+            document.getElementById("productName").innerHTML = productInfo[1];
+            document.getElementById("productPrice").innerHTML = productInfo[2];
+            document.getElementById("productCategory").innerHTML = productInfo[3];
+            document.getElementById("product-image").src = imagePath;
+
+        });
+        
+    </script>
+
+}
+@{
+    ViewData["Title"] = "BuyProduct";
+
+    string imagePath = "https://cldv6212st10069070.blob.core.windows.net/product-images/" + Model?.ImagePath;
+
+        <div align="center">
+
+        @{
+            if (imagePath.EndsWith(".png"))
+            {
+                        <img id="product-image" src="" height="300" />
+            }
+            else
+            {
+                        <img id="product-image" src="" height="300" style="border-color: black; border-width: 3px; border-style: solid" />
+            }
+        }
+
+            <br />
+            <br />
+            <div style="background-color: white; border-color: black; border-width: 1px; border-style: solid">
+                <br />
+                <h3>Purchase successful</h3>
+                <b>Thank you for your purchase.</b>
+                <br />
+                <br />
+            </div>
+            <br />
+        <table>
+            <tr>
+                <th>Product ID:</th>
+                <td id="productId"></td>
+            </tr>
+            <tr>
+                <th>Product Name:</th>
+                <td id="productName"></td>
+            </tr>
+            <tr>
+                <th>Product Price:</th>
+                <td id="productPrice"></td>
+            </tr>
+            <tr>
+                <th>Product Category:</th>
+                <td id="productCategory"></td>
+            </tr>
+        </table>
+
+        <br />
+        <br />
+        <button class="button-class" style="width: 230px" onclick="window.location = '/Home/Products'">Return to the Products page</button>
+        <br />
+        <br />
+
+        </div>
+}
